@@ -1,11 +1,11 @@
 Please implement the following feature request:
 
-**Feature Request:** Show every button the user presses. Basically if a user does a 5x5 it shows the x and the 5.
+**Feature Request:** The display should show numbers and operators in real time (for example, if the user presses 4, ×, 4, the screen shows '4×4'). Ensure that each button appends to the display instead of replacing it.
 
 **Project Context:**
 - Repository: v-vibers/simple-calculator-app
-- Branch: feat/show-every-button-the-user-presses-basic
-- Base Branch: feat/initial-implementation
+- Branch: feat/the-display-should-show-numbers-and-oper
+- Base Branch: feat/show-every-button-the-user-presses-basic
 - Requested by: paruiz01
 
 **CRITICAL - Read Project Instructions First:**

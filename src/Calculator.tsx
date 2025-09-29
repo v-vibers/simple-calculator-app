@@ -10,24 +10,45 @@ export default function Calculator() {
   const [shouldResetDisplay, setShouldResetDisplay] = useState(false);
   const [mode, setMode] = useState<CalculatorMode>('basic');
   const [buttonHistory, setButtonHistory] = useState<string>('');
+  const [currentNumber, setCurrentNumber] = useState('0');
 
   const handleNumber = (num: string) => {
     setButtonHistory(prev => prev + num);
+    let newNumber: string;
     if (shouldResetDisplay) {
-      setDisplay(num);
+      newNumber = num;
+      setCurrentNumber(num);
+      setDisplay(previousValue !== null && operation !== null ? `${previousValue}${operation === '*' ? '×' : operation === '/' ? '÷' : operation === '-' ? '−' : operation}${num}` : num);
       setShouldResetDisplay(false);
     } else {
-      setDisplay(display === '0' ? num : display + num);
+      newNumber = currentNumber === '0' ? num : currentNumber + num;
+      setCurrentNumber(newNumber);
+      if (previousValue !== null && operation !== null) {
+        const opSymbol = operation === '*' ? '×' : operation === '/' ? '÷' : operation === '-' ? '−' : operation;
+        setDisplay(`${previousValue}${opSymbol}${newNumber}`);
+      } else {
+        setDisplay(newNumber);
+      }
     }
   };
 
   const handleDecimal = () => {
     setButtonHistory(prev => prev + '.');
+    let newNumber: string;
     if (shouldResetDisplay) {
-      setDisplay('0.');
+      newNumber = '0.';
+      setCurrentNumber(newNumber);
+      setDisplay(previousValue !== null && operation !== null ? `${previousValue}${operation === '*' ? '×' : operation === '/' ? '÷' : operation === '-' ? '−' : operation}${newNumber}` : newNumber);
       setShouldResetDisplay(false);
-    } else if (!display.includes('.')) {
-      setDisplay(display + '.');
+    } else if (!currentNumber.includes('.')) {
+      newNumber = currentNumber + '.';
+      setCurrentNumber(newNumber);
+      if (previousValue !== null && operation !== null) {
+        const opSymbol = operation === '*' ? '×' : operation === '/' ? '÷' : operation === '-' ? '−' : operation;
+        setDisplay(`${previousValue}${opSymbol}${newNumber}`);
+      } else {
+        setDisplay(newNumber);
+      }
     }
   };
 
@@ -36,9 +57,13 @@ export default function Calculator() {
     setButtonHistory(prev => prev + opSymbol);
     if (previousValue !== null && operation !== null && !shouldResetDisplay) {
       handleEquals();
+      setPreviousValue(display);
+      setCurrentNumber(display);
+    } else {
+      setPreviousValue(currentNumber);
     }
-    setPreviousValue(display);
     setOperation(op);
+    setDisplay(`${currentNumber}${opSymbol}`);
     setShouldResetDisplay(true);
   };
 
@@ -47,7 +72,7 @@ export default function Calculator() {
 
     setButtonHistory(prev => prev + '=');
     const prev = parseFloat(previousValue);
-    const current = parseFloat(display);
+    const current = parseFloat(currentNumber);
     let result: number;
 
     switch (operation) {
@@ -70,7 +95,9 @@ export default function Calculator() {
         return;
     }
 
-    setDisplay(isNaN(result) ? 'Error' : String(result));
+    const resultString = isNaN(result) ? 'Error' : String(result);
+    setDisplay(resultString);
+    setCurrentNumber(resultString);
     setPreviousValue(null);
     setOperation(null);
     setShouldResetDisplay(true);
@@ -78,6 +105,7 @@ export default function Calculator() {
 
   const handleClear = () => {
     setDisplay('0');
+    setCurrentNumber('0');
     setPreviousValue(null);
     setOperation(null);
     setShouldResetDisplay(false);
@@ -85,15 +113,28 @@ export default function Calculator() {
   };
 
   const handleBackspace = () => {
-    if (display.length === 1) {
-      setDisplay('0');
+    if (currentNumber.length === 1) {
+      setCurrentNumber('0');
+      if (previousValue !== null && operation !== null) {
+        const opSymbol = operation === '*' ? '×' : operation === '/' ? '÷' : operation === '-' ? '−' : operation;
+        setDisplay(`${previousValue}${opSymbol}0`);
+      } else {
+        setDisplay('0');
+      }
     } else {
-      setDisplay(display.slice(0, -1));
+      const newNumber = currentNumber.slice(0, -1);
+      setCurrentNumber(newNumber);
+      if (previousValue !== null && operation !== null) {
+        const opSymbol = operation === '*' ? '×' : operation === '/' ? '÷' : operation === '-' ? '−' : operation;
+        setDisplay(`${previousValue}${opSymbol}${newNumber}`);
+      } else {
+        setDisplay(newNumber);
+      }
     }
   };
 
   const handleScientific = (func: string) => {
-    const value = parseFloat(display);
+    const value = parseFloat(currentNumber);
     let result: number;
 
     switch (func) {
@@ -131,21 +172,34 @@ export default function Calculator() {
         return;
     }
 
-    setDisplay(isNaN(result) ? 'Error' : String(result));
+    const resultString = isNaN(result) ? 'Error' : String(result);
+    setDisplay(resultString);
+    setCurrentNumber(resultString);
     setShouldResetDisplay(true);
   };
 
   const handleToggleSign = () => {
-    setDisplay(String(-parseFloat(display)));
+    const newNumber = String(-parseFloat(currentNumber));
+    setCurrentNumber(newNumber);
+    if (previousValue !== null && operation !== null) {
+      const opSymbol = operation === '*' ? '×' : operation === '/' ? '÷' : operation === '-' ? '−' : operation;
+      setDisplay(`${previousValue}${opSymbol}${newNumber}`);
+    } else {
+      setDisplay(newNumber);
+    }
   };
 
   const handlePi = () => {
-    setDisplay(String(Math.PI));
+    const piString = String(Math.PI);
+    setDisplay(piString);
+    setCurrentNumber(piString);
     setShouldResetDisplay(true);
   };
 
   const handleE = () => {
-    setDisplay(String(Math.E));
+    const eString = String(Math.E);
+    setDisplay(eString);
+    setCurrentNumber(eString);
     setShouldResetDisplay(true);
   };
 
