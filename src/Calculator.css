@@ -45,6 +45,43 @@
   border-color: white;
 }
 
+.button-history {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: right;
+  margin-bottom: 0.5rem;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  word-break: break-all;
+  font-family: 'Courier New', monospace;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.button-history::-webkit-scrollbar {
+  height: 4px;
+}
+
+.button-history::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+}
+
+.button-history::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.button-history::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
 .display {
   background: rgba(0, 0, 0, 0.3);
   color: white;
@@ -151,6 +188,12 @@
 @media (max-width: 480px) {
   .calculator {
     padding: 1rem;
+  }
+
+  .button-history {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    min-height: 25px;
   }
 
   .display {
