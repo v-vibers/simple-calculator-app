@@ -9,8 +9,10 @@ export default function Calculator() {
   const [operation, setOperation] = useState<string | null>(null);
   const [shouldResetDisplay, setShouldResetDisplay] = useState(false);
   const [mode, setMode] = useState<CalculatorMode>('basic');
+  const [buttonHistory, setButtonHistory] = useState<string>('');
 
   const handleNumber = (num: string) => {
+    setButtonHistory(prev => prev + num);
     if (shouldResetDisplay) {
       setDisplay(num);
       setShouldResetDisplay(false);
@@ -20,6 +22,7 @@ export default function Calculator() {
   };
 
   const handleDecimal = () => {
+    setButtonHistory(prev => prev + '.');
     if (shouldResetDisplay) {
       setDisplay('0.');
       setShouldResetDisplay(false);
@@ -29,6 +32,8 @@ export default function Calculator() {
   };
 
   const handleOperation = (op: string) => {
+    const opSymbol = op === '*' ? '×' : op === '/' ? '÷' : op === '-' ? '−' : op;
+    setButtonHistory(prev => prev + opSymbol);
     if (previousValue !== null && operation !== null && !shouldResetDisplay) {
       handleEquals();
     }
@@ -40,6 +45,7 @@ export default function Calculator() {
   const handleEquals = () => {
     if (previousValue === null || operation === null) return;
 
+    setButtonHistory(prev => prev + '=');
     const prev = parseFloat(previousValue);
     const current = parseFloat(display);
     let result: number;
@@ -75,6 +81,7 @@ export default function Calculator() {
     setPreviousValue(null);
     setOperation(null);
     setShouldResetDisplay(false);
+    setButtonHistory('');
   };
 
   const handleBackspace = () => {
@@ -159,6 +166,8 @@ export default function Calculator() {
             Scientific
           </button>
         </div>
+
+        <div className="button-history">{buttonHistory || '\u00A0'}</div>
 
         <div className="display">{display}</div>
 
